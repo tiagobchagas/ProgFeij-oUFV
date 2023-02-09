@@ -4,8 +4,9 @@ library(dplyr)
 
 setwd("/Users/tiagobchagas/Desktop/Qualificação")
 list.files()
-carioca = read.csv("conjuntacarioca.csv", header = T, sep = ";")
 
+carioca = read.csv("conjuntacarioca.csv", header = T, sep = ";")
+str(carioca)
 carioca <- carioca %>% 
   mutate_at(vars(Trials, Blocks, Rep, Treat, Families), as.factor)
 
