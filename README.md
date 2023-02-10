@@ -20,8 +20,8 @@
 ## Modelo Análise Conjunta
 
 
-##ANOVA e BLUP
+### ANOVA e BLUP
 
 
-##SORTEIO DE EXPERIMENTOS
+## SORTEIO DE EXPERIMENTOS
 ---
