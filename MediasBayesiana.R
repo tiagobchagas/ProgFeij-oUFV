@@ -1,37 +1,43 @@
-#install.packages("emmeans")
+
+#loading packges
 library(emmeans)
 library(dplyr)
+library(MASS)
+library(lmerTest)
 
-setwd("/Users/tiagobchagas/Desktop/Qualificação")
-list.files()
 
 carioca = read.csv("conjuntacarioca.csv", header = T, sep = ";")
 str(carioca)
+
+#setting factors 
 carioca <- carioca %>% 
   mutate_at(vars(Trials, Blocks, Rep, Treat, Families), as.factor)
 
+#spliting dataset in seasons
 carioca2019 = carioca %>% filter(Trials == "LS19")
-str(carioca2019)
 carioca2020 = carioca %>% filter(Trials == "LT20")
 carioca2021 = carioca %>% filter(Trials == "LT21")
 carioca2022 = carioca %>% filter(Trials == "LT22")
-#install.packages("agricolae")
-
-library(agricolae)
-#install.packages("MASS")
-library(MASS)
-#install.packages("nlme")
-library(nlme)
-#X<-carioca # Leitura dos dados X
 
 
 
-library(lmerTest)
+#writing the model
 m1f <- lm(PROD ~ Families + Rep + Blocks, data = carioca2019)
 anova(m1f)
 m1 <- lmer(PROD ~ Families + Rep + (1 | Blocks), data = carioca2019)
 anova(m1)
+#library(mitml)
+#fml <- ReadDis + SES ~ ReadAchiev + (1|ID)
+#imp <- panImpute(studentratings, formula=fml, n.burn=1000, n.iter=100, m=5)
+#implist <- mitmlComplete(imp, print=1:5)
 
+#library(lme4)
+#fit <- with(implist, lmer(ReadAchiev ~ (1|ID), REML=FALSE))
+
+#sapply(seq(m1), function(i) m1[[i]]@devcomp[["cmp"]][["dev"]])
+#sapply(seq(m1), function(i) m1[[i]]@devcomp[["cmp"]][["dev"]])
+# [1] 8874.517 8874.517 8874.517 8874.517 8874.517
+#devcomp(m1)
 #summary(glht(fit.ibd2, linfct = mcp(Treat = c(1, 0, 0, 0, 0, -1))))
 
 print(m1)
@@ -41,23 +47,25 @@ emm1 <- emmeans(m1, specs = ~Families)
 #summary(fit.ibd2)
 
 #str(emm0)
-# prod2019 = print(emm0)
+prod2019 = print(emm1)
 
 #system("say Chama, Acunha!")
 #library(notifier)
 #notify(  title = "Terminou macho",  msg = c("Chama","Acunha"))
 
 m2 <- lmer(PROD ~ Families + Rep + (1 | Blocks), data = carioca2020)
-m2f <- lm(PROD ~ Families + Rep +  Blocks, data = carioca2020)
-m2r <- lmer(PROD ~ (1| Families) + Rep + (1 | Blocks), data = carioca2020)
-lrt
-m2r
-anova(m2r)
-plot(m2f)
-hist(m2f$residuals)
-anova(m2f)
-levels(carioca2020$Blocks)
-m2 <- lmer(PROD ~ Families + (1 | Blocks), data = carioca2020)
+
+
+#m2f <- lm(PROD ~ Families + Rep +  Blocks, data = carioca2020)
+#m2r <- lmer(PROD ~ (1| Families) + Rep + (1 | Blocks), data = carioca2020)
+#lrt
+#m2r
+#anova(m2r)
+#plot(m2f)
+#hist(m2f$residuals)
+#anova(m2f)
+#levels(carioca2020$Blocks)
+#m2 <- lmer(PROD ~ Families + (1 | Blocks), data = carioca2020)
 emm2 <- emmeans(m2, specs = ~Families)
 prod2020 = print(emm2)
 
@@ -67,13 +75,51 @@ m3 <- lmer(AG ~ Families + Rep + (1 |Blocks), data = carioca2020)
 emm3 <- emmeans(m3, specs = ~Families)
 ag2020 = print(emm3)
 
+models <- list()
+for (i in c("carioca2021$PROD", "carioca2021$AG", "carioca2021$ARQ")) {
+  f <- formula(paste("i ~ (1|Blocks)+Families + Rep + ", i))
+  models[[i]] <- lmer(f, data=carioca2021)
+}
 
-m4 <- lmer(PROD ~ Families + (1 | Blocks), data = carioca2021)
+resultados = matrix(NA,3,2)
+
+variaveis = carioca2021[,7:9]
+
+
+for ( i in variaveis)   { 
+  
+    f = formula(paste( "y ~ Families + Rep + (1 | Blocks)+", i))
+ models[[i]] <- lmer(f, data=carioca2021)
+  print(models)
+}
+#####
+ attach(var1)
+>> Response <- c("gnst", "spst", "fvt", "Oph", "cniv", "frgv", "gniv", 
+                 "inct","omnv","Sobs", "ACE", "Chao1","Chao2", "Abund")
+>
+  > ## Output storage step up
+  > results <- vector("list", length(Response))
+> ##Start the loop
+  > #Create the formula string
+  > #stmLM <- as.formula(paste(Response[i]~ccov + x5k_c + ltr + x5k_fr +  elev + (1|P_ID) + (1|mtx) + (1|site)))
+>
+  >
+  >
+  > lmer <- lmer(stmLM)
+  >
+    > # Save the results{
+    > results[[i]] <- summary(lmer)
+    > }
+> {
+  > print(results[[i]])
+  > }
+
+m4 <- lmer(PROD ~ Families + Rep + (1 | Blocks), data = carioca2021)
 emm4 <- emmeans(m4, specs = ~Families)
 prod2021 = print(emm4)
 
 
-m5 <- lmer(AG ~ Families + (1 | Blocks), data = carioca2021)
+m5 <- lmer(AG ~ Families + Rep + (1 | Blocks), data = carioca2021)
 emm5 <- emmeans(m5, specs = ~Families)
 ag2021 = print(emm5)
 
