@@ -75,44 +75,44 @@ m3 <- lmer(AG ~ Families + Rep + (1 |Blocks), data = carioca2020)
 emm3 <- emmeans(m3, specs = ~Families)
 ag2020 = print(emm3)
 
-models <- list()
-for (i in c("carioca2021$PROD", "carioca2021$AG", "carioca2021$ARQ")) {
-  f <- formula(paste("i ~ (1|Blocks)+Families + Rep + ", i))
-  models[[i]] <- lmer(f, data=carioca2021)
-}
+#models <- list()
+#for (i in c("carioca2021$PROD", "carioca2021$AG", "carioca2021$ARQ")) {
+ # f <- formula(paste("i ~ (1|Blocks)+Families + Rep + ", i))
+#  models[[i]] <- lmer(f, data=carioca2021)
+#}
 
-resultados = matrix(NA,3,2)
+#resultados = matrix(NA,3,2)
 
-variaveis = carioca2021[,7:9]
+#variaveis = carioca2021[,7:9]
 
 
-for ( i in variaveis)   { 
+#for ( i in variaveis)   { 
   
-    f = formula(paste( "y ~ Families + Rep + (1 | Blocks)+", i))
- models[[i]] <- lmer(f, data=carioca2021)
-  print(models)
-}
+    #f = formula(paste( "y ~ Families + Rep + (1 | Blocks)+", i))
+ #models[[i]] <- lmer(f, data=carioca2021)
+  #print(models)
+#}
 #####
- attach(var1)
->> Response <- c("gnst", "spst", "fvt", "Oph", "cniv", "frgv", "gniv", 
-                 "inct","omnv","Sobs", "ACE", "Chao1","Chao2", "Abund")
->
-  > ## Output storage step up
-  > results <- vector("list", length(Response))
-> ##Start the loop
-  > #Create the formula string
-  > #stmLM <- as.formula(paste(Response[i]~ccov + x5k_c + ltr + x5k_fr +  elev + (1|P_ID) + (1|mtx) + (1|site)))
->
-  >
-  >
-  > lmer <- lmer(stmLM)
-  >
-    > # Save the results{
-    > results[[i]] <- summary(lmer)
-    > }
-> {
-  > print(results[[i]])
-  > }
+# attach(var1)
+ #Response <- c("gnst", "spst", "fvt", "Oph", "cniv", "frgv", "gniv", 
+ #                "inct","omnv","Sobs", "ACE", "Chao1","Chao2", "Abund")
+
+  ## Output storage step up
+   #results <- vector("list", length(Response))
+ ##Start the loop
+   #Create the formula string
+   #stmLM <- as.formula(paste(Response[i]~ccov + x5k_c + ltr + x5k_fr +  elev + (1|P_ID) + (1|mtx) + (1|site)))
+
+  
+  
+  # lmer <- lmer(stmLM)
+  
+     # Save the results{
+    # results[[i]] <- summary(lmer)
+    # }
+# {
+  # print(results[[i]])
+  # }
 
 m4 <- lmer(PROD ~ Families + Rep + (1 | Blocks), data = carioca2021)
 emm4 <- emmeans(m4, specs = ~Families)
@@ -123,22 +123,22 @@ m5 <- lmer(AG ~ Families + Rep + (1 | Blocks), data = carioca2021)
 emm5 <- emmeans(m5, specs = ~Families)
 ag2021 = print(emm5)
 
-m6 <- lmer(Arq ~ Families + (1 | Blocks), data = carioca2021)
+m6 <- lmer(Arq ~ Families + Rep + (1 | Blocks), data = carioca2021)
 emm6 <- emmeans(m6, specs = ~Families)
 arq2021 = print(emm6)
 
-m7 <- lmer(PROD ~ Families + (1 | Blocks), data = carioca2022)
+m7 <- lmer(PROD ~ Families + Rep + (1 | Blocks), data = carioca2022)
 emm7 <- emmeans(m7, specs = ~Families)
 prod2022 = print(emm7)
 
-m8 <- lmer(AG ~ Families + (1 | Blocks), data = carioca2022)
+m8 <- lmer(AG ~ Families + Rep + (1 | Blocks), data = carioca2022)
 emm8 <- emmeans(m8, specs = ~Families)
 ag2022 = print(emm8)
 
-m9 <- lmer(Arq ~ Families + (1 | Blocks), data = carioca2022)
+m9 <- lmer(Arq ~ Families + Rep + (1 | Blocks), data = carioca2022)
 emm9 <- emmeans(m9, specs = ~Families)
 arq2022 = print(emm9)
-system("say Chama, Acunha!")
+#system("say Chama, Acunha!")
 #renomear 
 colnames(prod2019)[2] = "prod2019"
 colnames(prod2020)[2] = "prod2020"

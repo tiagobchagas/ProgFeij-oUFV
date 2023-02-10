@@ -19,4 +19,9 @@
 
 ## Modelo Análise Conjunta
 
+
+##ANOVA e BLUP
+
+
+##SORTEIO DE EXPERIMENTOS
 ---
