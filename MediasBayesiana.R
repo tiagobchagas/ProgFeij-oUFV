@@ -2,16 +2,12 @@
 #loading packges
 library(emmeans)
 library(dplyr)
-library(MASS)
 library(lmerTest)
-
+library(tidyverse)
 
 carioca = read.csv("conjuntacarioca.csv", header = T, sep = ";")
 str(carioca)
 
-#setting factors 
-carioca <- carioca %>% 
-  mutate_at(vars(Trials, Blocks, Rep, Treat, Families), as.factor)
 
 #spliting dataset in seasons
 carioca2019 = carioca %>% filter(Trials == "LS19")
@@ -19,11 +15,23 @@ carioca2020 = carioca %>% filter(Trials == "LT20")
 carioca2021 = carioca %>% filter(Trials == "LT21")
 carioca2022 = carioca %>% filter(Trials == "LT22")
 
+#setting factors 
+carioca2019 <- carioca2019 %>% 
+  mutate_at(vars(Trials, Blocks, Rep, Treat, Families), as.factor)
+carioca2020 <- carioca2020 %>% 
+  mutate_at(vars(Trials, Blocks, Rep, Treat, Families), as.factor)
+carioca2021 <- carioca2021 %>% 
+  mutate_at(vars(Trials, Blocks, Rep, Treat, Families), as.factor)
+carioca2022 <- carioca2022 %>% 
+  mutate_at(vars(Trials, Blocks, Rep, Treat, Families), as.factor)
+
+str(carioca2022)
+levels(carioca2022$Families)
 
 
 #writing the model
-m1f <- lm(PROD ~ Families + Rep + Blocks, data = carioca2019)
-anova(m1f)
+#m1f <- lm(PROD ~ Families + Rep + Blocks, data = carioca2019)
+#anova(m1f)
 m1 <- lmer(PROD ~ Families + Rep + (1 | Blocks), data = carioca2019)
 anova(m1)
 #library(mitml)
@@ -149,16 +157,26 @@ colnames(arq2021)[2] = "arq2021"
 colnames(prod2022)[2] = "prod2022"
 colnames(ag2022)[2] = "ag2022"
 colnames(arq2022)[2] = "arq2022"
+
+
+target <- c(Prod2022[,1])
+#target <- c(prod2022[,1])
+#target <- paste(target, collapse = ", ")
+#target == Prod2022["Line"]
+target=unlist(target)
+#str(target)
+target
 #filtrar as famílias anteriormente selecionadas nas safras anteriores
-MeanProd2019= select(filter(carioca19, Families %in% c(target)), c(Families,prod2019))
-MeanProd2020= select(filter(prod2020, Families %in% c(target)), c(Families,prod2020))
-MeanAg2020= select(filter(ag2020, Families %in% c(target)), c(Families,ag2020))
-MeanProd2021= select(filter(prod2021, Families %in% c(target)), c(Families,prod2021))
-MeanAg2021= select(filter(ag2021, Families %in% c(target)), c(Families,ag2021))
-MeanArq2021= select(filter(arq2021, Families %in% c(target)), c(Families,arq2021))
-MeanProd2022= select(filter(prod2022, Families %in% c(target)), c(Families,prod2022))
-MeanAg2022= select(filter(ag2022, Families %in% c(target)), c(Families,ag2022))
-MeanArq2022= select(filter(arq2022, Families %in% c(target)), c(Families,arq2022))
+MeanProd2019= dplyr::select(dplyr::filter(prod2019, Families %in% c(target)), c(Families,prod2019))
+MeanProd2020= select(filter(Prod2020, Line %in% c(target)), c(Line,prod2020))
+MeanAg2020= select(filter(Ag2020, Line %in% c(target)), c(Line,ag2020))
+MeanProd2021= select(filter(Prod2021, Line %in% c(target)), c(Line,prod2021))
+MeanAg2021= select(filter(Ag2021, Line %in% c(target)), c(Line,ag2021))
+MeanArq2021= select(filter(Arq2021, Line %in% c(target)), c(Line,arq2021))
+MeanProd2022= select(filter(Prod2022, Line %in% c(target)), c(Line,prod2022))
+MeanAg2022= select(filter(Ag2022, Line %in% c(target)), c(Line,ag2022))
+MeanArq2022= select(filter(Arq2022, Line %in% c(target)), c(Line,arq2022))
+
 
 
 #juntas os arquivos
@@ -171,7 +189,7 @@ carioca22=bind_cols(MeanProd2022,MeanAg2022,MeanArq2022)
 
 cariocameans=bind_rows(list(carioca19,carioca20, carioca21, carioca22), .id = "id")
 
-target <- c(prod2022[,1])
+
 
 #filter(carioca19, Families %in% target)  # equivalently, dat %>% filter(name %in% target)
 #filter(df,date=='Sunday'| date=='Monday')
