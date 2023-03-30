@@ -9,6 +9,8 @@ library(dplyr)
 library(fs)
 library(tidyverse)
 
+list.files()
+read.csv("conjuntacarioca.csv", header =T,sep = ";")
 #rm(target)
 #ff
 #getwd()
